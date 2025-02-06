@@ -101,20 +101,23 @@ function showFinalMessage() {
   message.classList.add('show');
   message.style.background = 'none';
   
-  // Crear contenedor para el mensaje final
+  // Ajustar tamaño del contenedor según el tamaño de pantalla
+  const fontSize = window.innerWidth <= 480 ? '1.2em' : '1.4em';
+  const padding = window.innerWidth <= 480 ? '1.5rem' : '1.8rem';
+  
   const messageContent = `
     <div class="final-message-container" style="
       background: linear-gradient(45deg, #ff1493, #ff69b4); 
-      padding: 1.8rem; 
+      padding: ${padding}; 
       border-radius: 30px; 
       box-shadow: 0 0 20px rgba(0,0,0,0.2);
       border: 6px solid white;
       position: relative;
       overflow: hidden;
-      max-width: 85%;
+      max-width: 90%;
       margin: 0 auto;
       animation: borderGlow 2s infinite alternate;">
-      <div class="heart-icon" style="font-size: 2.5rem;">💝</div>
+      <div class="heart-icon" style="font-size: ${fontSize};">💝</div>
       <h1 style="
         font-family: 'Fredoka One', sans-serif; 
         font-size: 2.5em; 
@@ -209,6 +212,20 @@ function showFinalMessage() {
     clearInterval(extraHeartsInterval);
     clearInterval(upHeartsInterval);
   }, 10000);
+
+  // Agregar evento para manejar cambios de orientación
+  window.addEventListener('resize', () => {
+    if (document.querySelector('#message').style.display === 'flex') {
+      adjustMessageSize();
+    }
+  });
+
+  function adjustMessageSize() {
+    const container = document.querySelector('.final-message-container');
+    if (container) {
+      container.style.maxHeight = window.innerHeight * 0.8 + 'px';
+    }
+  }
 }
 
 // Función para crear estrellas brillantes
@@ -465,13 +482,16 @@ function createStartScreenDecorations() {
     { top: '50%', left: '-40px', transform: 'translateY(-50%)' }
   ];
   
+  // Ajustar tamaño de corazones según el tamaño de pantalla
+  const heartSize = window.innerWidth <= 480 ? '1.8rem' : '2.5rem';
+  
   const hearts = ['💝', '💖', '💗', '💓'];
   hearts.forEach((heart, index) => {
     const heartEl = document.createElement('div');
     heartEl.textContent = heart;
     heartEl.style.cssText = `
       position: absolute;
-      font-size: 2.5rem;
+      font-size: ${heartSize};
       animation: rotateHeart 4s linear infinite;
       animation-delay: ${index * 0.5}s;
       ${Object.entries(positions[index]).map(([key, value]) => `${key}: ${value}`).join(';')};
@@ -492,8 +512,10 @@ function createStartScreenDecorations() {
   startScreen.style.backgroundSize = '200% 200%';
   startScreen.style.animation = 'gradientBG 10s ease infinite';
   
-  // Crear estrellas brillantes
-  for(let i = 0; i < 30; i++) {
+  // Ajustar cantidad de estrellas según el tamaño de pantalla
+  const starCount = window.innerWidth <= 480 ? 15 : 30;
+  
+  for(let i = 0; i < starCount; i++) {
     const star = document.createElement('div');
     star.style.cssText = `
       position: absolute;
@@ -509,25 +531,3 @@ function createStartScreenDecorations() {
     `;
     startScreen.appendChild(star);
   }
-  
-  // Crear corazones flotantes con menor frecuencia
-  setInterval(() => {
-    const heart = document.createElement('div');
-    heart.innerHTML = '❤️';
-    heart.style.cssText = `
-      position: absolute;
-      font-size: ${Math.random() * 15 + 10}px;
-      left: ${Math.random() * 100}vw;
-      bottom: -20px;
-      opacity: 0.4;
-      animation: floatUp ${Math.random() * 3 + 4}s linear forwards;
-      z-index: 0;
-    `;
-    startScreen.appendChild(heart);
-    
-    setTimeout(() => heart.remove(), 7000);
-  }, 500);
-}
-
-// Llamar a la función cuando se carga la página
-document.addEventListener('DOMContentLoaded', createStartScreenDecorations);

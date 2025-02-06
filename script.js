@@ -12,10 +12,10 @@ let fontSize = 2;
 let currentMessage = 'No';
 
 let messages = [
-  'Estas segurx?',
+  'muy tite',
   'Piensalo bien',
-  'Piensalo muy bien',
-  'Piensalo',
+  'te dare chabita',
+  'uno bechito si aceptas',
   'Mira el otro botón'
 ]
 
